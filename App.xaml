@@ -1,0 +1,13 @@
+﻿<Application x:Class="VK_R.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:VK_R"
+             >
+    <!--StartupUri="MainWindow.xaml"-->
+    <Application.Resources>
+        <local:DialogViewModel x:Key="DialogViewModel" />
+        <DataTemplate DataType="{x:Type local:DialogViewModel}">
+            <local:DialogControl />
+        </DataTemplate>
+    </Application.Resources>
+</Application>
