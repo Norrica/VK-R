@@ -5,10 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:VK_R"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="60" d:DesignWidth="100">
     <Grid>
-        <TextBox x:Name="LoginBox" Text="{Binding Login}"></TextBox>
-        <PasswordBox x:Name="PasswordBox" ></PasswordBox>
-        <Button x:Name="Authorize" Click="Authorize_Click"></Button>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="LoginBox" Text="{Binding Login}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"></TextBox>
+        <PasswordBox x:Name="PasswordBox" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"></PasswordBox>
+        <Button x:Name="Authorize" Content="Authorize" Click="Authorize_Click" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"></Button>
     </Grid>
 </UserControl>

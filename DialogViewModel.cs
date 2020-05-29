@@ -14,7 +14,7 @@ namespace VK_R
 
         public void GetDialogs()//fetch from server or locally
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
             var dials = Api.VkApi.Messages.GetConversations(new GetConversationsParams { 
             Extended=true,
             Count=5
@@ -22,6 +22,9 @@ namespace VK_R
 
             foreach (var item in dials.Items)
             {
+                Dialogs.Add(new DialogModel(
+                    item.Conversation.Peer.ToString(),
+                    item.LastMessage.Text));
                 MessageBox.Show(item.LastMessage.Date.ToString());
             }
         }

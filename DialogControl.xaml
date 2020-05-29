@@ -16,10 +16,12 @@
                         <Label Content="{Binding ProfilePicture}"/>
                         <Label Content="{Binding LastDevice}"/>
                         <Label Content="{Binding WasOnline}"/>
+                        <TextBox x:Name="QuickReply" Text="{Binding QuickReply}"/>
                         <Button Content="Send" Command="{Binding SendQuickReplyCommand}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <!--<Label Grid.Row="0" Grid.Column="0" Content="ssss" Background="Blue"></Label>-->
     </Grid>
 </UserControl>

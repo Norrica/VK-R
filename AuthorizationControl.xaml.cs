@@ -24,11 +24,24 @@ namespace VK_R
         public AuthorizationControl()
         {
             InitializeComponent();
+
         }
 
         private void Authorize_Click(object sender, RoutedEventArgs e)
         {
             Api.Authorize(LoginBox.Text, PasswordBox.Password);
+            if (Api.VkApi.IsAuthorized)
+            {
+                MessageBox.Show(Api.VkApi.IsAuthorized.ToString());
+                Authorized();
+            }
+            else
+            {
+#warning temporary as fuck
+                MessageBox.Show("Fail. Try Again");
+            }
         }
+        public delegate void Method();
+        public event Method Authorized ;
     }
 }

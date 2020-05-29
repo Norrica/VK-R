@@ -26,11 +26,7 @@ namespace VK_R
         public MainWindow()
         {
             InitializeComponent();
-
-            //var cont = new MainViewModel();
-            //DataContext = cont;
-
-            //MessageBox.Show(cont.ViewModels.Count.ToString());
+            DataContext = new MainViewModel();
         }
     }
 }

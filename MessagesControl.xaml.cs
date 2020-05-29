@@ -16,15 +16,13 @@ using System.Windows.Shapes;
 namespace VK_R
 {
     /// <summary>
-    /// Interaction logic for DialogControl.xaml
+    /// Interaction logic for MessagesControl.xaml
     /// </summary>
-    public partial class DialogControl : UserControl
+    public partial class MessagesControl : UserControl
     {
-        public DialogControl()
+        public MessagesControl()
         {
             InitializeComponent();
-            //DataContext = new DialogViewModel();
         }
-
     }
 }

@@ -6,12 +6,25 @@
         xmlns:local="clr-namespace:VK_R"    
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <DockPanel x:Name="MainPanel" x:Uid="MainPanel">
-        <DockPanel.Children>
-       
-            <local:DialogControl Visibility="Visible"/>
-            <local:AuthorizationControl Visibility="Visible"></local:AuthorizationControl>
-            <local:MessagesControl Visibility ="Visible"></local:MessagesControl>
-        </DockPanel.Children>
-    </DockPanel>
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type local:DialogViewModel}">
+            <local:DialogControl />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type local:AuthorizationControl}">
+            <local:AuthorizationControl />
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <ContentControl x:Name="Dial"  Content="{Binding CurrentControl}" Grid.Column="0" Grid.Row="0" ></ContentControl>
+        <!--<ContentControl x:Name="Auth" Content="{Binding AuthControl}" Grid.Column="0" Grid.Row="0"></ContentControl>-->
+        <!--<ContentControl x:Name="Mes" Content="{Binding AuthControl}" Grid.Column="0" Grid.Row="0"></ContentControl>-->
+    </Grid>
 </Window>

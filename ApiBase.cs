@@ -42,7 +42,7 @@ namespace VK_R
                 }
             }
             if (_instance.VkApi == null)
-            {//add islogged check later
+            {
                 throw new ArgumentNullException(nameof(_instance.VkApi));
             }
             return _instance;
@@ -56,7 +56,7 @@ namespace VK_R
                 ApplicationId = 7381572,
                 Login = login,
                 Password = password,
-                // find da way to pass only messages and related stuff
+#warning find da way to pass only messages and related stuff
                 Settings = Settings.All
             });
         }
