@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 using Image = System.Windows.Controls.Image;
@@ -28,21 +29,22 @@ namespace VK_R
         public DateTime? WasOnline { get => wasOnline; set => wasOnline = value; }
         public string QuickReply { get => quickReply; set => SetField(ref quickReply, value); }
 
-        public DialogModel() { }
-        public DialogModel(string peerName, string lastMessage,DateTime? wasOnline)
+        public DialogModel(string peerName, string lastMessage,DateTime? wasOnline, Uri avatarUrl)
         {
             PeerName = peerName;
             LastMessage = lastMessage;
             WasOnline = wasOnline;
+            var avatar = new Image{Source = new BitmapImage(avatarUrl)};
+            ProfilePicture = avatar;
         }
 
-        //public Command SendQuickReplyCommand
-        //{
-        //    get =>
-        //        (sendReply ?? (sendReply = new Command(SendQuickMessage, CanSendQuickMessage)));
-        //    set => SetField(ref sendReply, value);
+        public Command SendQuickReplyCommand
+        {
+            get =>
+                (sendReply ?? (sendReply = new Command(SendQuickMessage, CanSendQuickMessage)));
+            set => SetField(ref sendReply, value);
 
-        //}
+        }
         private void SendQuickMessage()
         {
             API.VkApi.Messages.Send(new MessagesSendParams
@@ -52,7 +54,7 @@ namespace VK_R
                 RandomId = new Random().Next(),
 
             }) ;
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
         private bool CanSendQuickMessage()
         {

@@ -10,14 +10,18 @@
         <ListView x:Name="DialogDisplayer" ItemsSource="{Binding Dialogs}" ScrollViewer.VerticalScrollBarVisibility="Visible">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel>
-                        <Label Content="{Binding PeerName}"/>
-                        <Label Content="{Binding LastMessage}"/>
-                        <Label Content="{Binding ProfilePicture}"/>
-                        <Label Content="{Binding LastDevice}"/>
-                        <Label Content="{Binding WasOnline}"/>
-                        <TextBox x:Name="QuickReply" Text="{Binding QuickReply}"/>
-                        <Button Content="Send" Command="{Binding SendQuickReplyCommand}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Vertical">
+                            <Label Content="{Binding PeerName}"/>
+                            <Label Content="{Binding ProfilePicture}"/>
+                            <Label Content="{Binding WasOnline}"/>
+                            <Label Content="{Binding LastDevice}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical">
+                            <Label Content="{Binding LastMessage}"/>
+                            <TextBox x:Name="NotQuickReply" Text="{Binding Path=QuickReply, Mode=TwoWay}"/>
+                            <Button Content="Send" Command="{Binding SendQuickReplyCommand}"/>
+                        </StackPanel>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

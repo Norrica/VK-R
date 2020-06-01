@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using VkNet.Enums.SafetyEnums;
 using VkNet.Model.RequestParams;
 
@@ -24,7 +25,6 @@ namespace VK_R
             var dials = Api.VkApi.Messages.GetConversations(new GetConversationsParams
             {
                 Extended = true,
-                Count = 10
             });
             for (int i = 0,j=0; i < dials.Items.Count && j < dials.Profiles.Count; i++)
             {
@@ -33,7 +33,8 @@ namespace VK_R
                     Dialogs.Add(new DialogModel(
                     dials.Items[i].Conversation.ChatSettings.Title,
                     dials.Items[i].LastMessage.Text,
-                    dials.Items[i].LastMessage.Date));
+                    dials.Items[i].LastMessage.Date,
+                    dials.Items[i].Conversation.ChatSettings.Photo?.Photo100 ?? new Uri("https://vk.com/images/camera_100.png")));
                 }
                 if (dials.Items[i].Conversation.Peer.Type == ConversationPeerType.User)
                 {
@@ -41,7 +42,8 @@ namespace VK_R
                     Dialogs.Add(new DialogModel(
                     $"{ profile.LastName } { profile.FirstName}",
                     dials.Items[i].LastMessage.Text,
-                    dials.Items[i].LastMessage.Date));
+                    dials.Items[i].LastMessage.Date,
+                    profile.Photo100?? new Uri("https://vk.com/images/camera_100.png")));
                 }
                 if (dials.Items[i].Conversation.Peer.Type == ConversationPeerType.Group)
                 {
@@ -49,7 +51,10 @@ namespace VK_R
                     Dialogs.Add(new DialogModel(
                     $"{group.Name}",
                     dials.Items[i].LastMessage.Text,
-                    dials.Items[i].LastMessage.Date));
+                    dials.Items[i].LastMessage.Date,
+                    group.Photo100 ?? new Uri("https://vk.com/images/camera_100.png")));
+
+
                 }
             }
         }
