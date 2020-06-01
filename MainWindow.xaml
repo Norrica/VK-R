@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:VK_R"    
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+
     <Window.Resources>
         <DataTemplate DataType="{x:Type local:DialogViewModel}">
             <local:DialogControl />
@@ -23,8 +24,9 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <ContentControl x:Name="Dial"  Content="{Binding CurrentControl}" Grid.Column="0" Grid.Row="0" ></ContentControl>
-        <!--<ContentControl x:Name="Auth" Content="{Binding AuthControl}" Grid.Column="0" Grid.Row="0"></ContentControl>-->
-        <!--<ContentControl x:Name="Mes" Content="{Binding AuthControl}" Grid.Column="0" Grid.Row="0"></ContentControl>-->
+
+        <ContentControl x:Name="Dial"  Content="{Binding CurrentControl}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"></ContentControl>
+        <!--<ContentControl x:Name="Mes" Content="{Binding }"></ContentControl>-->
+
     </Grid>
 </Window>

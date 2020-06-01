@@ -26,7 +26,13 @@ namespace VK_R
         public MainWindow()
         {
             InitializeComponent();
+            //SizeToContent = SizeToContent.WidthAndHeight; try later
             DataContext = new MainViewModel();
+        }
+
+        private void Dial_SourceUpdated(object sender, DataTransferEventArgs e)
+        {
+
         }
     }
 }

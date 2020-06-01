@@ -15,7 +15,7 @@ namespace VK_R
         private Image profilePicture;
         private Image lastdevice;
         private bool isOnline;
-        private DateTime wasOnline = new DateTime(2000, 1, 1);
+        private DateTime? wasOnline = new DateTime(2000, 1, 1);
         private string quickReply;
         private Command sendReply;
 
@@ -25,14 +25,15 @@ namespace VK_R
         public Image ProfilePicture { get => profilePicture; set => profilePicture = value; }
         public Image Lastdevice { get => lastdevice; set => lastdevice = value; }
         public bool IsOnline { get => isOnline; set => isOnline = value; }
-        public DateTime WasOnline { get => wasOnline; set => wasOnline = value; }
+        public DateTime? WasOnline { get => wasOnline; set => wasOnline = value; }
         public string QuickReply { get => quickReply; set => SetField(ref quickReply, value); }
 
         public DialogModel() { }
-        public DialogModel(string peerName, string lastMessage)
+        public DialogModel(string peerName, string lastMessage,DateTime? wasOnline)
         {
             PeerName = peerName;
             LastMessage = lastMessage;
+            WasOnline = wasOnline;
         }
 
         //public Command SendQuickReplyCommand

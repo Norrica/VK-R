@@ -7,20 +7,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <!--<StackPanel x:Name="TopBar" Orientation="Horizontal">
-            <Label x:Name="PeerName" Content="{Binding !!!}"></Label>
-            <Label x:Name="PeerAvatar" Content="{Binding !!!}"></Label>
-            <Label Content="{Binding LastDevice}"/>
-            <Label Content="{Binding WasOnline}"/>
-        </StackPanel>
-        <ListView x:Name="Messages" ItemsSource="{Binding !!!}">
+        <ListView x:Name="Messages" ItemsSource="{Binding Messages}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel>
+                        <Label Content="{Binding Avatar}"/>
                         <Label Content="{Binding PeerName}"/>
-                        <Label Content="{Binding Message}"/>
-                        <Label Content="{Binding ProfilePicture}"/>
-                        <Button Content="Send" Command="{Binding SendQuickReplyCommand}"/>
+                        <Label Content="{Binding Text}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
@@ -29,7 +22,7 @@
             <Button x:Name="AttachAttachment" Content="{Binding !!!(Image)}"></Button>
             <TextBox x:Name="Reply" Text="{Binding !!!}"></TextBox>
             <Button x:Name="SendReply" Command="{Binding !!!}"></Button>
-        </StackPanel>-->
-        <Label Grid.Row="0" Grid.Column="0" Foreground="Black" Background="AliceBlue" Height="100" Width="100" Content="ыыы"></Label>
+        </StackPanel>
+        <!--<Label Grid.Row="0" Grid.Column="0" Foreground="Black" Background="AliceBlue" Height="100" Width="100" Content="ыыы"></Label>-->
     </Grid>
 </UserControl>

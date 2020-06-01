@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VkNet.Exception;
 
 namespace VK_R
 {
@@ -29,7 +30,17 @@ namespace VK_R
 
         private void Authorize_Click(object sender, RoutedEventArgs e)
         {
-            Api.Authorize(LoginBox.Text, PasswordBox.Password);
+            //handle captchaneededexception
+            try
+            {
+#warning uncomment after debug
+                // Api.Authorize(LoginBox.Text, PasswordBox.Password);
+                Api.Authorize("a.kolpakov2010@mail.ru", "ZxcAsdQwe123");
+            }
+            catch (CaptchaNeededException ex)
+            {
+                throw;
+            }
             if (Api.VkApi.IsAuthorized)
             {
                 MessageBox.Show(Api.VkApi.IsAuthorized.ToString());
@@ -42,6 +53,6 @@ namespace VK_R
             }
         }
         public delegate void Method();
-        public event Method Authorized ;
+        public event Method Authorized;
     }
 }

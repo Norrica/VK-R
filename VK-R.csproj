@@ -101,6 +101,8 @@
     <Compile Include="MessagesControl.xaml.cs">
       <DependentUpon>MessagesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MessagesModel.cs" />
+    <Compile Include="MessagesViewModel.cs" />
     <Compile Include="PropertyChangedBase.cs" />
     <Page Include="AuthorizationControl.xaml">
       <SubType>Designer</SubType>

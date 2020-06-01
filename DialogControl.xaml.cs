@@ -23,7 +23,7 @@ namespace VK_R
         public DialogControl()
         {
             InitializeComponent();
-            //DataContext = new DialogViewModel();
+            
         }
 
     }
