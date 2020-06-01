@@ -32,17 +32,21 @@ namespace VK_R
                 {
                     Dialogs.Add(new DialogModel(
                     dials.Items[i].Conversation.ChatSettings.Title,
+                    dials.Items[i].Conversation.Peer.Id,
                     dials.Items[i].LastMessage.Text,
+#warning chats cant be online, fix dat
+                    //dials.Items[i].Conversation.ChatSettings.MembersCount,
                     dials.Items[i].LastMessage.Date,
-                    dials.Items[i].Conversation.ChatSettings.Photo?.Photo100 ?? new Uri("https://vk.com/images/camera_100.png")));
+                    dials.Items[i].Conversation.ChatSettings.Photo?.Photo100 ?? new Uri("https://vk.com/images/camera_100.png"))) ;
                 }
                 if (dials.Items[i].Conversation.Peer.Type == ConversationPeerType.User)
                 {
                     var profile = dials.Profiles.FirstOrDefault(x => x.Id == dials.Items[i].Conversation.Peer.Id);
                     Dialogs.Add(new DialogModel(
                     $"{ profile.LastName } { profile.FirstName}",
+                    dials.Items[i].Conversation.Peer.Id,
                     dials.Items[i].LastMessage.Text,
-                    dials.Items[i].LastMessage.Date,
+                    profile?.LastSeen?.Time ?? new DateTime(2000,1,1),
                     profile.Photo100?? new Uri("https://vk.com/images/camera_100.png")));
                 }
                 if (dials.Items[i].Conversation.Peer.Type == ConversationPeerType.Group)
@@ -50,7 +54,9 @@ namespace VK_R
                     var group = dials.Groups.FirstOrDefault(x => x.Id == dials.Items[i].Conversation.Peer.LocalId);
                     Dialogs.Add(new DialogModel(
                     $"{group.Name}",
+                    dials.Items[i].Conversation.Peer.Id,
                     dials.Items[i].LastMessage.Text,
+#warning groups can't be online, fix dat
                     dials.Items[i].LastMessage.Date,
                     group.Photo100 ?? new Uri("https://vk.com/images/camera_100.png")));
 

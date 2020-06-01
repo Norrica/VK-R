@@ -17,7 +17,7 @@
                             <Label Content="{Binding WasOnline}"/>
                             <Label Content="{Binding LastDevice}"/>
                         </StackPanel>
-                        <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Vertical" >
                             <Label Content="{Binding LastMessage}"/>
                             <TextBox x:Name="NotQuickReply" Text="{Binding Path=QuickReply, Mode=TwoWay}"/>
                             <Button Content="Send" Command="{Binding SendQuickReplyCommand}"/>

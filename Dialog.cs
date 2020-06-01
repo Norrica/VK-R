@@ -11,17 +11,17 @@ namespace VK_R
     {
         ApiBase API = ApiBase.GetInstance();
         private string peerName = "ss";
-        private int peerId;//maybe not necessary
+        private long peerId;//maybe not necessary
         private string lastMessage = "lm";
         private Image profilePicture;
         private Image lastdevice;
         private bool isOnline;
         private DateTime? wasOnline = new DateTime(2000, 1, 1);
         private string quickReply;
-        private Command sendReply;
+        private RelayCommand sendReply;
 
         public string PeerName { get => peerName; set => peerName = value; }
-        public int PeerId { get => peerId; set => peerId = value; }
+        public long PeerId { get => peerId; set => peerId = value; }
         public string LastMessage { get => lastMessage; set => lastMessage = value; }
         public Image ProfilePicture { get => profilePicture; set => profilePicture = value; }
         public Image Lastdevice { get => lastdevice; set => lastdevice = value; }
@@ -29,19 +29,20 @@ namespace VK_R
         public DateTime? WasOnline { get => wasOnline; set => wasOnline = value; }
         public string QuickReply { get => quickReply; set => SetField(ref quickReply, value); }
 
-        public DialogModel(string peerName, string lastMessage,DateTime? wasOnline, Uri avatarUrl)
+        public DialogModel(string peerName,long peerId, string lastMessage,DateTime? wasOnline, Uri avatarUrl)
         {
             PeerName = peerName;
+            PeerId = peerId;
             LastMessage = lastMessage;
             WasOnline = wasOnline;
             var avatar = new Image{Source = new BitmapImage(avatarUrl)};
             ProfilePicture = avatar;
         }
 
-        public Command SendQuickReplyCommand
+        public RelayCommand SendQuickReplyCommand
         {
             get =>
-                (sendReply ?? (sendReply = new Command(SendQuickMessage, CanSendQuickMessage)));
+                (sendReply ?? (sendReply = new RelayCommand(SendQuickMessage, CanSendQuickMessage)));
             set => SetField(ref sendReply, value);
 
         }

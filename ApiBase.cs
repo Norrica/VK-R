@@ -15,7 +15,7 @@ namespace VK_R
 
     public class ApiBase
     {
-        
+
         private static object _sync = new object();
 
         private static volatile ApiBase _instance;
@@ -51,15 +51,16 @@ namespace VK_R
         {
             if (VkApi.IsAuthorized)
                 return;
-            VkApi.Authorize(new ApiAuthParams {
+            VkApi.Authorize(new ApiAuthParams
+            {
 #warning check if appId suitable
-                ApplicationId = 7381572,
+                ApplicationId = 2685278,
                 Login = login,
                 Password = password,
 #warning find da way to pass only messages and related stuff
-                Settings = Settings.All
+                Settings = Settings.All | Settings.Offline | Settings.Friends
             });
         }
-        
+
     }
 }

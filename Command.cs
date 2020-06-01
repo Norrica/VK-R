@@ -49,59 +49,42 @@ namespace VK_R
     }
     public class RelayCommand : ICommand
     {
-        #region Fields
-
-        readonly Action<object> _execute;
-        readonly Predicate<object> _canExecute;
-
-        #endregion // Fields
-
-        #region Constructors
+        private readonly Action _action;
+        private readonly Func<bool> _canExecute;
 
         /// <summary>
-        /// Creates a new command that can always execute.
+        /// Creates instance of the command handler
         /// </summary>
-        /// <param name="execute">The execution logic.</param>
-        public RelayCommand(Action<object> execute)
-            : this(execute, null)
+        /// <param name="action">Action to be executed by the command</param>
+        /// <param name="canExecute">A bolean property to containing current permissions to execute the command</param>
+        public RelayCommand(Action action, Func<bool> canExecute)
         {
-        }
-
-        /// <summary>
-        /// Creates a new command.
-        /// </summary>
-        /// <param name="execute">The execution logic.</param>
-        /// <param name="canExecute">The execution status logic.</param>
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
-        {
-            if (execute == null)
-                throw new ArgumentNullException("execute");
-
-            _execute = execute;
+            _action = action;
             _canExecute = canExecute;
         }
 
-        #endregion // Constructors
-
-        #region ICommand Members
-
-
-        public bool CanExecute(object parameters)
-        {
-            return _canExecute == null ? true : _canExecute(parameters);
-        }
-
+        /// <summary>
+        /// Wires CanExecuteChanged event 
+        /// </summary>
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public void Execute(object parameters)
+        /// <summary>
+        /// Forcess checking if execute is allowed
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public bool CanExecute(object parameter)
         {
-            _execute(parameters);
+            return _canExecute.Invoke();
         }
 
-        #endregion // ICommand Members
+        public void Execute(object parameter)
+        {
+            _action();
+        }
     }
 }
