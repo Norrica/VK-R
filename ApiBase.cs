@@ -22,7 +22,7 @@ namespace VK_R
 
         private VkApi vkApi;
         private static volatile ApiBase _instance;
-        public event Action<Message, User> OnNewMessage;
+        public event Action<Message> OnNewMessage;
         public event Action<Message, User> OnlineChanged;
         private ulong ts;
         private ulong? pts;
@@ -93,10 +93,10 @@ namespace VK_R
                     {
                         case 4://New Message
                             OnNewMessage?.Invoke(
-                                longPollResponse.Messages[i],
-                                longPollResponse.Profiles
-                                 .Where(u => u.Id == longPollResponse.Messages[i].UserId)
-                                 .FirstOrDefault()
+                                longPollResponse.Messages[i]
+                                //longPollResponse.Profiles
+                                // .Where(u => u.Id == longPollResponse.Messages[i].UserId)
+                                // .FirstOrDefault()
                             );                            
                             break;
                         case 8://Friend online

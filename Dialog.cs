@@ -35,7 +35,7 @@ namespace VK_R
 
         }
 
-        private void HandleNewMessage(Message mes, User user)
+        private void HandleNewMessage(Message mes)
         {
             if(mes.PeerId == PeerId)
                 LastMessage = mes.Text;
