@@ -103,6 +103,7 @@
     </Compile>
     <Compile Include="MessagesModel.cs" />
     <Compile Include="MessagesViewModel.cs" />
+    <Compile Include="Online.cs" />
     <Compile Include="PropertyChangedBase.cs" />
     <Page Include="AuthorizationControl.xaml">
       <SubType>Designer</SubType>

@@ -14,8 +14,8 @@
                         <StackPanel Orientation="Vertical">
                             <Label Content="{Binding PeerName}"/>
                             <Label Content="{Binding ProfilePicture}"/>
-                            <Label Content="{Binding WasOnline}"/>
-                            <Label Content="{Binding LastDevice}"/>
+                            <Label Content="{Binding Online.DisplayedText}"/>
+                            
                         </StackPanel>
                         <StackPanel Orientation="Vertical" >
                             <Label Content="{Binding LastMessage}"/>

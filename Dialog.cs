@@ -11,32 +11,63 @@ namespace VK_R
     {
         ApiBase API = ApiBase.GetInstance();
         private string peerName = "ss";
-        private long peerId;//maybe not necessary
+        private long peerId;
         private string lastMessage = "lm";
         private Image profilePicture;
         private Image lastdevice;
-        private bool isOnline;
-        private DateTime? wasOnline = new DateTime(2000, 1, 1);
+        
+        private Online online;
         private string quickReply;
         private RelayCommand sendReply;
 
         public string PeerName { get => peerName; set => peerName = value; }
         public long PeerId { get => peerId; set => peerId = value; }
-        public string LastMessage { get => lastMessage; set => lastMessage = value; }
+        public string LastMessage { get => lastMessage; set => SetField(ref lastMessage, value); }
         public Image ProfilePicture { get => profilePicture; set => profilePicture = value; }
         public Image Lastdevice { get => lastdevice; set => lastdevice = value; }
-        public bool IsOnline { get => isOnline; set => isOnline = value; }
-        public DateTime? WasOnline { get => wasOnline; set => wasOnline = value; }
+        
         public string QuickReply { get => quickReply; set => SetField(ref quickReply, value); }
+        public Online Online { get => online; set => SetField(ref online, value); }
+        
+        public DialogModel()
+        {
+            API.OnNewMessage += HandleNewMessage;
 
-        public DialogModel(string peerName,long peerId, string lastMessage,DateTime? wasOnline, Uri avatarUrl)
+        }
+
+        private void HandleNewMessage(Message mes, User user)
+        {
+            if(mes.PeerId == PeerId)
+                LastMessage = mes.Text;
+            //throw new NotImplementedException();
+        }
+
+        //for Chats
+        public DialogModel(string peerName, long peerId, string lastMessage, Uri avatarUrl, long membercount):this()
         {
             PeerName = peerName;
             PeerId = peerId;
             LastMessage = lastMessage;
-            WasOnline = wasOnline;
-            var avatar = new Image{Source = new BitmapImage(avatarUrl)};
-            ProfilePicture = avatar;
+            ProfilePicture = new Image { Source = new BitmapImage(avatarUrl) };
+            Online = new Online(membercount);
+            
+        }
+        //for Users
+        public DialogModel( string peerName,long peerId, string lastMessage, Uri avatarUrl, Online online):this()
+        {
+            PeerName = peerName;
+            PeerId = peerId;
+            LastMessage = lastMessage;
+            ProfilePicture = new Image { Source = new BitmapImage(avatarUrl) };
+            Online = new Online(online.IsOnline, online.WasOnline);
+        }
+        //for Groups
+        public DialogModel(string peerName, long peerId, string lastMessage, Uri avatarUrl):this()
+        {
+            PeerName = peerName;
+            PeerId = peerId;
+            LastMessage = lastMessage;
+            ProfilePicture = new Image { Source = new BitmapImage(avatarUrl) };
         }
 
         public RelayCommand SendQuickReplyCommand
@@ -46,6 +77,7 @@ namespace VK_R
             set => SetField(ref sendReply, value);
 
         }
+
         private void SendQuickMessage()
         {
             API.VkApi.Messages.Send(new MessagesSendParams
@@ -54,13 +86,14 @@ namespace VK_R
                 Message = QuickReply,
                 RandomId = new Random().Next(),
 
-            }) ;
+            });
+            QuickReply = String.Empty;
+            LastMessage = QuickReply;
             //throw new NotImplementedException();
         }
         private bool CanSendQuickMessage()
         {
             return !String.IsNullOrEmpty(QuickReply);
-            //throw new NotImplementedException();
         }
     }
 }
