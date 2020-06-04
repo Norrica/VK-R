@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using VkNet.Model;
+using VkNet.Model.Attachments;
 using VkNet.Model.RequestParams;
 using Image = System.Windows.Controls.Image;
 
@@ -15,7 +16,7 @@ namespace VK_R
         private string lastMessage = "lm";
         private Image profilePicture;
         private Image lastdevice;
-        
+        private AttachmentContent attachment;
         private Online online;
         private string quickReply;
         private RelayCommand sendReply;
@@ -32,7 +33,13 @@ namespace VK_R
         public DialogModel()
         {
             API.OnNewMessage += HandleNewMessage;
+            API.OnlineChanged += HandleOnlineChanged;
+        }
 
+        private void HandleOnlineChanged(User obj)
+        {
+            if (obj.Id == PeerId)
+                Online.IsOnline = obj.Online;
         }
 
         private void HandleNewMessage(Message mes)
@@ -88,7 +95,7 @@ namespace VK_R
 
             });
             QuickReply = String.Empty;
-            LastMessage = QuickReply;
+            //LastMessage = QuickReply;
             //throw new NotImplementedException();
         }
         private bool CanSendQuickMessage()

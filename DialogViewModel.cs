@@ -63,7 +63,6 @@ namespace VK_R
                     $"{group.Name}",
                     dials.Items[i].Conversation.Peer.Id,
                     dials.Items[i].LastMessage.Text,
-#warning groups can't be online, fix dat.UPD:kinda fixed, but my eyes bleed
                     group.Photo100 ?? new Uri("https://vk.com/images/camera_100.png")));
                     
 

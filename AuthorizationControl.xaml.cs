@@ -35,7 +35,7 @@ namespace VK_R
             {
 #warning uncomment after debug
                 // Api.Authorize(LoginBox.Text, PasswordBox.Password);
-                
+                Api.Authorize("a.kolpakov2010@mail.ru", "ZxcAsdQwe123");
             }
             catch (CaptchaNeededException ex)
             {

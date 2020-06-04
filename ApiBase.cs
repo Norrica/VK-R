@@ -23,7 +23,7 @@ namespace VK_R
         private VkApi vkApi;
         private static volatile ApiBase _instance;
         public event Action<Message> OnNewMessage;
-        public event Action<Message, User> OnlineChanged;
+        public event Action<User> OnlineChanged;
         private ulong ts;
         private ulong? pts;
 
@@ -87,7 +87,9 @@ namespace VK_R
                 });
 
                 pts = longPollResponse.NewPts;
-                for (int i = 0 , j=0; j < longPollResponse.History.Count && i<longPollResponse.Messages.Count; i++)
+                for (int i = 0 , j=0, k = 0; i < longPollResponse.History.Count 
+                    || j<longPollResponse.Messages.Count 
+                    || k<longPollResponse.Profiles.Count; i++,j++,k++)
                 {
                     switch (longPollResponse.History[i][0])
                     {
@@ -101,10 +103,10 @@ namespace VK_R
                             break;
                         case 8://Friend online
                             //longPollResponse.Profiles[i].On
-
+                            OnlineChanged.Invoke(longPollResponse.Profiles[k]);
                             break;
                         case 9://Friend Offline
-
+                            OnlineChanged.Invoke(longPollResponse.Profiles[k]);
                             break;
                         case 61://Friend started typing
                             break;

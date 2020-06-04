@@ -19,8 +19,12 @@
                         </StackPanel>
                         <StackPanel Orientation="Vertical" >
                             <Label Content="{Binding LastMessage}"/>
-                            <TextBox x:Name="NotQuickReply" Text="{Binding Path=QuickReply, Mode=TwoWay}"/>
-                            <Button Content="Send" Command="{Binding SendQuickReplyCommand}"/>
+                            <TextBox x:Name="NotQuickReply" Text="{Binding Path=QuickReply, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                                <TextBox.InputBindings>
+                                    <KeyBinding Command="{Binding Path=SendQuickReplyCommand}" Key="Enter" />
+                                </TextBox.InputBindings>
+                            </TextBox>
+                            <!--<Button Content="Send" Command="{Binding SendQuickReplyCommand}"/>-->
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>

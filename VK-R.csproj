@@ -89,6 +89,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ApiBase.cs" />
+    <Compile Include="AttachmentContent.cs" />
     <Compile Include="AuthorizationControl.xaml.cs">
       <DependentUpon>AuthorizationControl.xaml</DependentUpon>
     </Compile>
