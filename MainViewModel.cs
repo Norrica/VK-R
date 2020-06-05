@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using VkNet.Model.RequestParams;
 
 namespace VK_R
 {
@@ -15,7 +16,9 @@ namespace VK_R
         private ApiBase Api = ApiBase.GetInstance();
         private AuthorizationControl authControl = new AuthorizationControl();
         private DialogControl dialogs;
-        //private MessagesControl messages = new MessagesControl() { DataContext = new MessagesViewModel(); }
+        private DialogViewModel dvm;
+        private MessagesViewModel mvm;
+        private UserControl messages;
         private List<UserControl> controls = new List<UserControl>();
         private UserControl currentControl;
         public MainViewModel()
@@ -24,7 +27,9 @@ namespace VK_R
             authControl.Authorized += SwapControls;
             if (Api.VkApi.IsAuthorized)
             {
-                CurrentControl = new DialogControl() { DataContext = new DialogViewModel() }; ;
+                dvm = new DialogViewModel();
+                dvm.SelectionChanged += CreateMessageView;
+                CurrentControl = new DialogControl() { DataContext = dvm }; ;
             }
             else
             {
@@ -33,15 +38,25 @@ namespace VK_R
 
         }
 
+        private void CreateMessageView(DialogModel obj)
+        {
+            mvm = new MessagesViewModel(obj);
+            Messages = new MessagesControl { DataContext = mvm };
+
+           // throw new NotImplementedException();
+        }
+
         private void SwapControls()
         {
-            CurrentControl = new DialogControl() { DataContext = new DialogViewModel() }; ;
+            dvm = new DialogViewModel();
+            dvm.SelectionChanged += CreateMessageView;
+            CurrentControl = new DialogControl() { DataContext = dvm };
         }
 
         public AuthorizationControl AuthControl { get => authControl; set => SetField(ref authControl, value); }
         public DialogControl Dialogs { get => dialogs; set => SetField(ref dialogs, value); }
         public UserControl CurrentControl { get => currentControl; set => SetField(ref currentControl, value); }
         internal List<UserControl> Controls { get => controls; set => SetField(ref controls, value); }
-
+        public UserControl Messages { get => messages; set => SetField(ref messages, value); }
     }
 }

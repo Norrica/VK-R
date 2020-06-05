@@ -5,8 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VK_R"    
         mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+         TextElement.FontWeight="Regular"
+         TextElement.FontSize="13"
+         TextOptions.TextFormattingMode="Ideal"
+         TextOptions.TextRenderingMode="Auto"
+         Background="{DynamicResource MaterialDesignPaper}"
+         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="MainWindow" Height="450" Width="800"
-        SizeToContent="Width">
+        >
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type local:DialogViewModel}">
@@ -15,8 +23,11 @@
         <DataTemplate DataType="{x:Type local:AuthorizationControl}">
             <local:AuthorizationControl />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type local:MessagesControl}">
+            <local:MessagesControl />
+        </DataTemplate>
     </Window.Resources>
-    <Grid>
+    <Grid ShowGridLines="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
@@ -27,7 +38,7 @@
         </Grid.RowDefinitions>
 
         <ContentControl x:Name="Dial"  Content="{Binding CurrentControl}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"></ContentControl>
-        <!--<ContentControl x:Name="Mes" Content="{Binding }"></ContentControl>-->
+        <ContentControl x:Name="Mes" Content="{Binding Messages}" Grid.Column="1" Grid.RowSpan="2"></ContentControl>
 
     </Grid>
 </Window>

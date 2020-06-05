@@ -67,12 +67,11 @@ namespace VK_R
         }
         public void StartMessagesHandling()
         {
-            //Соединяемся с сервером Long Poll запросов и получаем необходимые ts и pts
             LongPollServerResponse longPoolServerResponse = VkApi.Messages.GetLongPollServer(needPts: true);
             ts = Convert.ToUInt64(longPoolServerResponse.Ts);
             pts = longPoolServerResponse.Pts;
 
-            //В отдельном потоке запускаем метод, который будет постоянно опрашивать Long Poll сервер на наличие новых сообщений
+           
             new Thread(LongPollEventLoop).Start();
         }
         private void LongPollEventLoop()
@@ -87,26 +86,23 @@ namespace VK_R
                 });
 
                 pts = longPollResponse.NewPts;
-                for (int i = 0 , j=0, k = 0; i < longPollResponse.History.Count 
-                    || j<longPollResponse.Messages.Count 
-                    || k<longPollResponse.Profiles.Count; i++,j++,k++)
+                for (int i = 0 , j=0, k = 0;
+                    i < longPollResponse.History.Count 
+                    && j<longPollResponse.Messages.Count 
+                    && k<longPollResponse.Profiles.Count; 
+                    i++,j++,k++)
                 {
                     switch (longPollResponse.History[i][0])
                     {
                         case 4://New Message
-                            OnNewMessage?.Invoke(
-                                longPollResponse.Messages[i]
-                                //longPollResponse.Profiles
-                                // .Where(u => u.Id == longPollResponse.Messages[i].UserId)
-                                // .FirstOrDefault()
-                            );                            
+                            OnNewMessage?.Invoke(longPollResponse.Messages[j]);                            
                             break;
                         case 8://Friend online
                             //longPollResponse.Profiles[i].On
-                            OnlineChanged.Invoke(longPollResponse.Profiles[k]);
+                            OnlineChanged?.Invoke(longPollResponse.Profiles[k]);
                             break;
                         case 9://Friend Offline
-                            OnlineChanged.Invoke(longPollResponse.Profiles[k]);
+                            OnlineChanged?.Invoke(longPollResponse.Profiles[k]);
                             break;
                         case 61://Friend started typing
                             break;

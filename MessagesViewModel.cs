@@ -1,21 +1,39 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using VkNet.Model.RequestParams;
 
 namespace VK_R
 {
     internal class MessagesViewModel : PropertyChangedBase
     {
+        private ApiBase Api = ApiBase.GetInstance();
         private ObservableCollection<MessagesModel> messages = new ObservableCollection<MessagesModel>();
-        public MessagesViewModel()
+        public MessagesViewModel(DialogModel dialog)
         {
-            GetMessages();
+            GetMessages(dialog);
         }
 
-        private void GetMessages()
+        private void GetMessages(DialogModel dialog)
         {
-            throw new NotImplementedException();
+            var messages = Api.VkApi.Messages.GetHistory(new MessagesGetHistoryParams
+            {
+                UserId = dialog.PeerId,
+
+            });
+            var mesList = messages.Messages.ToList();
+            foreach (var message in mesList)
+            {
+                Messages.Add(
+                    new MessagesModel(
+                    message.Text,
+                    dialog.PeerName,
+                    dialog.ProfilePicture,
+                    message.Date ?? message.Date.Value));
+            }
+            //throw new NotImplementedException();
         }
 
-        internal ObservableCollection<MessagesModel> Messages { get => messages; set => SetField(ref messages, value); }
+        public ObservableCollection<MessagesModel> Messages { get => messages; set => SetField(ref messages, value); }
     }
 }

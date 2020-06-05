@@ -26,7 +26,6 @@ namespace VK_R
         public MainWindow()
         {
             InitializeComponent();
-            //SizeToContent = SizeToContent.WidthAndHeight; try later
             DataContext = new MainViewModel();
         }
 

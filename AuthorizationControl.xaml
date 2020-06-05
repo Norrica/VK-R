@@ -16,8 +16,8 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBox x:Name="LoginBox" Text="{Binding Login}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"></TextBox>
-        <PasswordBox x:Name="PasswordBox" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"></PasswordBox>
-        <Button x:Name="Authorize" Content="Authorize" Click="Authorize_Click" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2"></Button>
+        <TextBox x:Name="LoginBox" Text="{Binding Login}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" MaxWidth="100"></TextBox>
+        <PasswordBox x:Name="PasswordBox" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" MaxWidth="100"></PasswordBox>
+        <Button x:Name="Authorize" Content="Authorize" Click="Authorize_Click" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" MaxWidth="100"></Button>
     </Grid>
 </UserControl>

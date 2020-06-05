@@ -12,25 +12,30 @@ namespace VK_R
     {
         ApiBase Api = ApiBase.GetInstance();
         private ObservableCollection<DialogModel> dialogs = new ObservableCollection<DialogModel>();
-
+        private DialogModel selectedDialog;
         public ObservableCollection<DialogModel> Dialogs { get => dialogs; set => SetField(ref dialogs, value); }
-
+        public DialogModel SelectedDialog { 
+            get => selectedDialog;
+                set 
+                {
+                    SetField(ref selectedDialog, value);
+                    SelectionChanged?.Invoke(selectedDialog);
+                }
+        }
+        public event Action<DialogModel> SelectionChanged;
         public DialogViewModel()
         {
             GetDialogs();
             Api.StartMessagesHandling();
-
-//#error handle messages here
         }
         public void GetDialogs()
         {
-            //throw new NotImplementedException();
             var dials = Api.VkApi.Messages.GetConversations(new GetConversationsParams
             {
                 Extended = true,
-                Fields = new[] {"photo_100","last_seen","online" }
+                Fields = new[] { "photo_100", "last_seen", "online" }
             });
-            for (int i = 0,j=0; i < dials.Items.Count && j < dials.Profiles.Count; i++)
+            for (int i = 0, j = 0; i < dials.Items.Count && j < dials.Profiles.Count; i++)
             {
                 if (dials.Items[i].Conversation.Peer.Type == ConversationPeerType.Chat)
                 {
@@ -47,7 +52,6 @@ namespace VK_R
                     Dialogs.Add(new DialogModel(
                     $"{ profile.LastName } { profile.FirstName}",
                     profile.Id,
-                    //dials.Items[i].Conversation.Peer.Id,
                     dials.Items[i].LastMessage.Text,
                     profile.Photo100 ?? new Uri("https://vk.com/images/camera_100.png"),
                     new Online(
@@ -64,7 +68,7 @@ namespace VK_R
                     dials.Items[i].Conversation.Peer.Id,
                     dials.Items[i].LastMessage.Text,
                     group.Photo100 ?? new Uri("https://vk.com/images/camera_100.png")));
-                    
+
 
                 }
             }

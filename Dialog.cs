@@ -11,12 +11,12 @@ namespace VK_R
     internal class DialogModel : PropertyChangedBase
     {
         ApiBase API = ApiBase.GetInstance();
-        private string peerName = "ss";
+        private string peerName;
         private long peerId;
-        private string lastMessage = "lm";
+        private string lastMessage;
         private Image profilePicture;
-        private Image lastdevice;
         private AttachmentContent attachment;
+        private Image imgAttachment;
         private Online online;
         private string quickReply;
         private RelayCommand sendReply;
@@ -25,15 +25,46 @@ namespace VK_R
         public long PeerId { get => peerId; set => peerId = value; }
         public string LastMessage { get => lastMessage; set => SetField(ref lastMessage, value); }
         public Image ProfilePicture { get => profilePicture; set => profilePicture = value; }
-        public Image Lastdevice { get => lastdevice; set => lastdevice = value; }
-        
-        public string QuickReply { get => quickReply; set => SetField(ref quickReply, value); }
+        public AttachmentContent Attachment { get => attachment; set => SetField(ref attachment, value); }
+        public Image ImgAttachment { get => imgAttachment; set => SetField(ref imgAttachment ,value); }
         public Online Online { get => online; set => SetField(ref online, value); }
-        
+        public string QuickReply { get => quickReply; set => SetField(ref quickReply, value); }
         public DialogModel()
         {
             API.OnNewMessage += HandleNewMessage;
             API.OnlineChanged += HandleOnlineChanged;
+        }
+        public DialogModel(Image attachment) : this()
+        {
+            ImgAttachment = attachment;
+        }
+        //for Chats
+        public DialogModel(string peerName, long peerId, string lastMessage, Uri avatarUrl) : this()
+        {
+            PeerName = peerName;
+            PeerId = peerId;
+            LastMessage = lastMessage;
+            ProfilePicture = new Image { Source = new BitmapImage(avatarUrl) };
+        }
+        public DialogModel(string peerName, long peerId, string lastMessage, Uri avatarUrl, long membercount):this(peerName, peerId, lastMessage, avatarUrl)
+        {
+            Online = new Online(membercount);
+            
+        }
+        //for Users
+        public DialogModel( string peerName,long peerId, string lastMessage, Uri avatarUrl, Online online):this(peerName, peerId, lastMessage, avatarUrl)
+        {
+            Online = new Online(online.IsOnline, online.WasOnline);
+        }
+        //for Groups
+        
+
+        public RelayCommand SendQuickReplyCommand
+        {
+            get =>
+                (sendReply ?? (sendReply = new RelayCommand(SendQuickMessage, CanSendQuickMessage)));
+            set => SetField(ref sendReply, value);
+
         }
 
         private void HandleOnlineChanged(User obj)
@@ -44,45 +75,10 @@ namespace VK_R
 
         private void HandleNewMessage(Message mes)
         {
-            if(mes.PeerId == PeerId)
+
+            if (mes.PeerId == PeerId)
                 LastMessage = mes.Text;
             //throw new NotImplementedException();
-        }
-
-        //for Chats
-        public DialogModel(string peerName, long peerId, string lastMessage, Uri avatarUrl, long membercount):this()
-        {
-            PeerName = peerName;
-            PeerId = peerId;
-            LastMessage = lastMessage;
-            ProfilePicture = new Image { Source = new BitmapImage(avatarUrl) };
-            Online = new Online(membercount);
-            
-        }
-        //for Users
-        public DialogModel( string peerName,long peerId, string lastMessage, Uri avatarUrl, Online online):this()
-        {
-            PeerName = peerName;
-            PeerId = peerId;
-            LastMessage = lastMessage;
-            ProfilePicture = new Image { Source = new BitmapImage(avatarUrl) };
-            Online = new Online(online.IsOnline, online.WasOnline);
-        }
-        //for Groups
-        public DialogModel(string peerName, long peerId, string lastMessage, Uri avatarUrl):this()
-        {
-            PeerName = peerName;
-            PeerId = peerId;
-            LastMessage = lastMessage;
-            ProfilePicture = new Image { Source = new BitmapImage(avatarUrl) };
-        }
-
-        public RelayCommand SendQuickReplyCommand
-        {
-            get =>
-                (sendReply ?? (sendReply = new RelayCommand(SendQuickMessage, CanSendQuickMessage)));
-            set => SetField(ref sendReply, value);
-
         }
 
         private void SendQuickMessage()

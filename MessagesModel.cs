@@ -14,5 +14,13 @@ namespace VK_R
         public string PeerName { get => peerName; set => SetField(ref peerName, value); }
         public Image Avatar { get => avatar; set => SetField(ref avatar, value); }
         public DateTime SentOn { get => sentOn; set => SetField(ref sentOn, value); }
+
+        public MessagesModel(string text, string peername, Image avatar, DateTime sentOn)
+        {
+            Text = text;
+            PeerName = peername;
+            Avatar = avatar;
+            SentOn = sentOn;
+        }
     }
 }

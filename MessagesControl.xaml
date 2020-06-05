@@ -7,6 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
         <ListView x:Name="Messages" ItemsSource="{Binding Messages}">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -14,15 +18,18 @@
                         <Label Content="{Binding Avatar}"/>
                         <Label Content="{Binding PeerName}"/>
                         <Label Content="{Binding Text}"/>
+                        <Label Content="{Binding SentOn}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <StackPanel x:Name="BottomBar" Orientation="Horizontal">
-            <Button x:Name="AttachAttachment" Content="{Binding !!!(Image)}"></Button>
-            <TextBox x:Name="Reply" Text="{Binding !!!}"></TextBox>
-            <Button x:Name="SendReply" Command="{Binding !!!}"></Button>
-        </StackPanel>
-        <!--<Label Grid.Row="0" Grid.Column="0" Foreground="Black" Background="AliceBlue" Height="100" Width="100" Content="ыыы"></Label>-->
+        <!--<StackPanel x:Name="BottomBar" Orientation="Horizontal" Grid.Row="1" MaxHeight="40">
+            <TextBox x:Name="Reply" Text="{Binding QuickReply}">
+            <TextBox.InputBindings>
+                <KeyBinding Command="{Binding Path=SendQuickReplyCommand}" Key="Enter" />
+            </TextBox.InputBindings>
+            </TextBox>
+        </StackPanel>-->
+       
     </Grid>
 </UserControl>
