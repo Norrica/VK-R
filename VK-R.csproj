@@ -101,6 +101,9 @@
     <Compile Include="AuthorizationControl.xaml.cs">
       <DependentUpon>AuthorizationControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CaptchaWindow.xaml.cs">
+      <DependentUpon>CaptchaWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Command.cs" />
     <Compile Include="Dialog.cs" />
     <Compile Include="DialogControl.xaml.cs">
@@ -115,6 +118,10 @@
     <Compile Include="Online.cs" />
     <Compile Include="PropertyChangedBase.cs" />
     <Page Include="AuthorizationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CaptchaWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

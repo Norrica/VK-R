@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VkNet.Exception;
+using VkNet.Model;
 
 namespace VK_R
 {
@@ -39,7 +40,26 @@ namespace VK_R
             }
             catch (CaptchaNeededException ex)
             {
-                throw;
+                var cpt = new System.Windows.Controls.Image 
+                { 
+                    Source = new BitmapImage(ex.Img) 
+                };
+                CaptchaWindow cptchaWindow = new CaptchaWindow(cpt);
+
+                if (cptchaWindow.ShowDialog() == true)
+                {
+                    Api.VkApi.Authorize(new ApiAuthParams
+                    {
+                        Login = LoginBox.Text,
+                        Password = PasswordBox.Password,
+                        CaptchaSid = ex.Sid,
+                        CaptchaKey = cptchaWindow.SolvedCaptcha.Text
+
+                    }) ;
+                }
+                              
+                
+
             }
             if (Api.VkApi.IsAuthorized)
             {
@@ -54,5 +74,7 @@ namespace VK_R
         }
         public delegate void Method();
         public event Method Authorized;
+        //#error now u obligated to handle captcha
+        //https://ru.stackoverflow.com/questions/581470/Как-обрабатывать-капчу-с-помощью-библиотеки-vknet
     }
 }

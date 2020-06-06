@@ -22,7 +22,7 @@ namespace VK_R
 
         private VkApi vkApi;
         private static volatile ApiBase _instance;
-        public event Action<Message> OnNewMessage;
+        public event Action<Message,User> OnNewMessage;
         public event Action<User> OnlineChanged;
         private ulong ts;
         private ulong? pts;
@@ -82,7 +82,7 @@ namespace VK_R
                 {
                     Ts = ts,
                     Pts = pts,
-                    Fields = UsersFields.Photo100 //Указывает поля, которые будут возвращаться для каждого профиля. В данном примере для каждого отправителя сообщения получаем фото 100х100
+                    Fields = UsersFields.Photo50 //Указывает поля, которые будут возвращаться для каждого профиля. В данном примере для каждого отправителя сообщения получаем фото 100х100
                 });
 
                 pts = longPollResponse.NewPts;
@@ -95,7 +95,10 @@ namespace VK_R
                     switch (longPollResponse.History[i][0])
                     {
                         case 4://New Message
-                            OnNewMessage?.Invoke(longPollResponse.Messages[j]);                            
+                            var profile = longPollResponse.Profiles
+                             .Where(u => u.Id == longPollResponse.Messages[i].FromId)
+                             .FirstOrDefault();
+                            OnNewMessage?.Invoke(longPollResponse.Messages[j], profile);                            
                             break;
                         case 8://Friend online
                             //longPollResponse.Profiles[i].On

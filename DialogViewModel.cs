@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using VkNet.Enums.SafetyEnums;
+using VkNet.Model;
 using VkNet.Model.RequestParams;
 
 namespace VK_R
@@ -27,7 +28,18 @@ namespace VK_R
         {
             GetDialogs();
             Api.StartMessagesHandling();
+            Api.OnNewMessage += RaiseDialog;
         }
+
+        private void RaiseDialog(Message arg1, User arg2)
+        {
+            var changedDial = Dialogs.Where(x => x.PeerId == arg1.UserId).FirstOrDefault();
+            Dialogs.Remove(changedDial);
+            Dialogs.Add(changedDial);
+#error Dispatcher, madafaka
+            throw new NotImplementedException();
+        }
+
         public void GetDialogs()
         {
             var dials = Api.VkApi.Messages.GetConversations(new GetConversationsParams

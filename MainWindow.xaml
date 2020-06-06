@@ -27,9 +27,10 @@
             <local:MessagesControl />
         </DataTemplate>
     </Window.Resources>
-    <Grid ShowGridLines="True">
+    <Grid ShowGridLines="False">
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="5"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -38,7 +39,13 @@
         </Grid.RowDefinitions>
 
         <ContentControl x:Name="Dial"  Content="{Binding CurrentControl}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"></ContentControl>
-        <ContentControl x:Name="Mes" Content="{Binding Messages}" Grid.Column="1" Grid.RowSpan="2"></ContentControl>
+        <GridSplitter Grid.Column="1" Grid.RowSpan="2"
+            HorizontalAlignment="Center"
+              VerticalAlignment="Stretch"
+              Background="Black" 
+              ShowsPreview="True"
+              Width="5"></GridSplitter>
+        <ContentControl x:Name="Mes" Content="{Binding Messages}" Grid.Column="2" Grid.RowSpan="2"></ContentControl>
 
     </Grid>
 </Window>

@@ -46,6 +46,7 @@ namespace VK_R
             LastMessage = lastMessage;
             ProfilePicture = new Image { Source = new BitmapImage(avatarUrl) };
         }
+        //for Groups
         public DialogModel(string peerName, long peerId, string lastMessage, Uri avatarUrl, long membercount):this(peerName, peerId, lastMessage, avatarUrl)
         {
             Online = new Online(membercount);
@@ -56,7 +57,7 @@ namespace VK_R
         {
             Online = new Online(online.IsOnline, online.WasOnline);
         }
-        //for Groups
+        
         
 
         public RelayCommand SendQuickReplyCommand
@@ -66,21 +67,6 @@ namespace VK_R
             set => SetField(ref sendReply, value);
 
         }
-
-        private void HandleOnlineChanged(User obj)
-        {
-            if (obj.Id == PeerId)
-                Online.IsOnline = obj.Online;
-        }
-
-        private void HandleNewMessage(Message mes)
-        {
-
-            if (mes.PeerId == PeerId)
-                LastMessage = mes.Text;
-            //throw new NotImplementedException();
-        }
-
         private void SendQuickMessage()
         {
             API.VkApi.Messages.Send(new MessagesSendParams
@@ -98,5 +84,20 @@ namespace VK_R
         {
             return !String.IsNullOrEmpty(QuickReply);
         }
+
+        private void HandleOnlineChanged(User obj)
+        {
+            if (obj.Id == PeerId)
+                Online.IsOnline = obj.Online;
+        }
+
+        private void HandleNewMessage(Message mes,User user)
+        {
+
+            if (mes.PeerId == PeerId)
+                LastMessage = mes.Text;
+            //throw new NotImplementedException();
+        }
+
     }
 }
