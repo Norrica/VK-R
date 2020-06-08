@@ -28,7 +28,7 @@ namespace VK_R
         {
             GetDialogs();
             Api.StartMessagesHandling();
-            Api.OnNewMessage += RaiseDialog;
+            //Api.OnNewMessage += RaiseDialog;
         }
 
         private void RaiseDialog(Message arg1, User arg2)
@@ -36,8 +36,8 @@ namespace VK_R
             var changedDial = Dialogs.Where(x => x.PeerId == arg1.UserId).FirstOrDefault();
             Dialogs.Remove(changedDial);
             Dialogs.Add(changedDial);
-#error Dispatcher, madafaka
-            throw new NotImplementedException();
+#warning Dispatcher, madafaka
+            //throw new NotImplementedException();
         }
 
         public void GetDialogs()

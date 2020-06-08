@@ -98,7 +98,8 @@ namespace VK_R
                             var profile = longPollResponse.Profiles
                              .Where(u => u.Id == longPollResponse.Messages[i].FromId)
                              .FirstOrDefault();
-                            OnNewMessage?.Invoke(longPollResponse.Messages[j], profile);                            
+                            //OnNewMessage?.Invoke(longPollResponse.Messages[j], profile);
+                            System.Windows.Application.Current.Dispatcher.Invoke(OnNewMessage, longPollResponse.Messages[j], profile);
                             break;
                         case 8://Friend online
                             //longPollResponse.Profiles[i].On

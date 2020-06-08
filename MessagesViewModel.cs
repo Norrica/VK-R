@@ -20,20 +20,17 @@ namespace VK_R
         {
             GetMessages(dialog);
             currentDialog = dialog;
-#warning throwed STAThreadException when creating label:
             Api.OnNewMessage += UpdateMessageList;
         }
 
         private void UpdateMessageList(Message message, User user)
         {
-            System.Windows.Application.Current.
-                Dispatcher.BeginInvoke(
-                new Action(() => Messages.Add(
+            Messages.Add(
                    new MessagesModel(
                    message.Text,
                    $"{user.FirstName} {user.LastName}",
                    user.Photo50,
-                   message.Date ?? message.Date.Value.ToLocalTime()))));
+                   message.Date ?? message.Date.Value.ToLocalTime()));
             //throw new NotImplementedException();
         }
 
@@ -41,9 +38,10 @@ namespace VK_R
         {
             var messages = Api.VkApi.Messages.GetHistory(new MessagesGetHistoryParams
             {
+                Reversed = true,
                 Extended = true,
                 UserId = dialog.PeerId,
-            });
+            }); ;
             var mesList = messages.Messages.ToList();
             var profList = messages.Users.ToList();
 #warning redo with For loop. UPD - redo Done
