@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:VK_R"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:BooleanToBackGroundConverter x:Key="BooleanToBackGroundConverter" />
+    </UserControl.Resources>
     <Grid ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"></RowDefinition>
@@ -17,7 +20,7 @@
                     <StackPanel>
                         <Image Source="{Binding Avatar}"/>
                         <Label Content="{Binding PeerName}"/>
-                        <Label Content="{Binding Text}"/>
+                        <Label Content="{Binding Text}" Background="{Binding ReadState, Converter={StaticResource BooleanToBackGroundConverter}}"/>
                         <Label Content="{Binding SentOn}"/>
                     </StackPanel>
                 </DataTemplate>
@@ -28,5 +31,6 @@
                 <KeyBinding Command="{Binding SendQuickReplyCommand}" Key="Enter" />
             </TextBox.InputBindings>
         </TextBox>
+        
     </Grid>
 </UserControl>

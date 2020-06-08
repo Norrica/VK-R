@@ -15,7 +15,7 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <Label x:Name="Captcha" Grid.Column="0" Grid.Row="0" MaxWidth="100"></Label>
+        <Image x:Name="Captcha" Grid.Column="0" Grid.Row="0" MaxWidth="100"></Image>
         <TextBox x:Name="SolvedCaptcha" Grid.Column="0" Grid.Row="1" MaxWidth="100"></TextBox>
         <Button x:Name="SolveCaptcha" Grid.Column="0" Grid.Row="2" MaxWidth="100"></Button>
     </Grid>

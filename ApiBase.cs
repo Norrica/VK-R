@@ -6,10 +6,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using VkNet;
 using VkNet.Abstractions.Authorization;
 using VkNet.AudioBypassService.Extensions;
 using VkNet.Enums.Filters;
+using VkNet.Exception;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 namespace VK_R
@@ -22,7 +24,7 @@ namespace VK_R
 
         private VkApi vkApi;
         private static volatile ApiBase _instance;
-        public event Action<Message,User> OnNewMessage;
+        public event Action<Message, User> OnNewMessage;
         public event Action<User> OnlineChanged;
         private ulong ts;
         private ulong? pts;
@@ -56,14 +58,35 @@ namespace VK_R
         {
             if (VkApi.IsAuthorized)
                 return;
-            VkApi.Authorize(new ApiAuthParams
+            try
             {
-                ApplicationId = 2685278,
-                Login = login,
-                Password = password,
-                Settings = Settings.All | Settings.Offline | Settings.Friends
-            });
+                VkApi.Authorize(new ApiAuthParams
+                {
+                    ApplicationId = 2685278,
+                    Login = login,
+                    Password = password,
+                    Settings = Settings.All | Settings.Offline | Settings.Friends | Settings.Messages
+                });
 
+            }
+            catch (CaptchaNeededException ex)
+            {
+                var cpt = new System.Windows.Controls.Image { Source = new BitmapImage(ex.Img) };
+                CaptchaWindow cptchaWindow = new CaptchaWindow(cpt);
+                if (cptchaWindow.ShowDialog() == true)
+                {
+                    VkApi.Authorize(new ApiAuthParams
+                    {
+                        Login = login,
+                        Password = password,
+                        CaptchaSid = ex.Sid,
+                        CaptchaKey = cptchaWindow.SolvedCaptcha.Text
+                    });
+                }
+
+
+
+            }
         }
         public void StartMessagesHandling()
         {
@@ -71,7 +94,7 @@ namespace VK_R
             ts = Convert.ToUInt64(longPoolServerResponse.Ts);
             pts = longPoolServerResponse.Pts;
 
-           
+
             new Thread(LongPollEventLoop).Start();
         }
         private void LongPollEventLoop()
@@ -86,37 +109,41 @@ namespace VK_R
                 });
 
                 pts = longPollResponse.NewPts;
-                for (int i = 0 , j=0, k = 0;
-                    i < longPollResponse.History.Count 
-                    && j<longPollResponse.Messages.Count 
-                    && k<longPollResponse.Profiles.Count; 
-                    i++,j++,k++)
+                for (int i = 0; i < longPollResponse.Messages.Count; i++)
                 {
-                    switch (longPollResponse.History[i][0])
-                    {
-                        case 4://New Message
-                            var profile = longPollResponse.Profiles
-                             .Where(u => u.Id == longPollResponse.Messages[i].FromId)
+                    var profile = longPollResponse.Profiles
+                             .Where(u => u.Id == longPollResponse.Messages[i].PeerId)
                              .FirstOrDefault();
-                            //OnNewMessage?.Invoke(longPollResponse.Messages[j], profile);
-                            System.Windows.Application.Current.Dispatcher.Invoke(OnNewMessage, longPollResponse.Messages[j], profile);
-                            break;
-                        case 8://Friend online
-                            //longPollResponse.Profiles[i].On
-                            OnlineChanged?.Invoke(longPollResponse.Profiles[k]);
-                            break;
-                        case 9://Friend Offline
-                            OnlineChanged?.Invoke(longPollResponse.Profiles[k]);
-                            break;
-                        case 61://Friend started typing
-                            break;
-                        case 62://Chat started typing
-                            break;
-                    }
+                    System.Windows.Application.Current.Dispatcher.Invoke(OnNewMessage, longPollResponse.Messages[i], profile);
+
+
+                    //                    switch (longPollResponse.History[i][0])
+                    //                    {
+                    //                        case 4://New Message
+                    //
+                    //                            var profile = longPollResponse.Profiles
+                    //                             .Where(u => u.Id == longPollResponse.Messages[i].PeerId)
+                    //                             .FirstOrDefault();
+                    //                            //OnNewMessage?.Invoke(longPollResponse.Messages[j], profile);
+                    //                            System.Windows.Application.Current.Dispatcher.Invoke(OnNewMessage, longPollResponse.Messages[j], profile);
+                    //                            break;
+                    //#warning later:
+                    //                            //case 8://Friend online
+                    //                            //    //longPollResponse.Profiles[i].On
+                    //                            //    OnlineChanged?.Invoke(longPollResponse.Profiles[k]);
+                    //                            //    break;
+                    //                            //case 9://Friend Offline
+                    //                            //    OnlineChanged?.Invoke(longPollResponse.Profiles[k]);
+                    //                            //    break;
+                    //                            //case 61://Friend started typing
+                    //                            //    break;
+                    //                            //case 62://Chat started typing
+                    //                            //    break;
+                    //                    }
                 }
             }
         }
-        
-        
+
+
     }
 }

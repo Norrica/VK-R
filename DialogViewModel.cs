@@ -28,16 +28,14 @@ namespace VK_R
         {
             GetDialogs();
             Api.StartMessagesHandling();
-            //Api.OnNewMessage += RaiseDialog;
+#warning exception 100%
+            Api.OnNewMessage += RaiseDialog;
         }
 
         private void RaiseDialog(Message arg1, User arg2)
         {
-            var changedDial = Dialogs.Where(x => x.PeerId == arg1.UserId).FirstOrDefault();
-            Dialogs.Remove(changedDial);
-            Dialogs.Add(changedDial);
-#warning Dispatcher, madafaka
-            //throw new NotImplementedException();
+            var changedDial = Dialogs.Where(x => x.PeerId == arg2.Id).FirstOrDefault();
+            Dialogs.Move(Dialogs.IndexOf(changedDial), 0);
         }
 
         public void GetDialogs()

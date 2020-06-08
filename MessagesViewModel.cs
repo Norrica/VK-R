@@ -18,35 +18,40 @@ namespace VK_R
         public ObservableCollection<MessagesModel> Messages { get => messages; set => SetField(ref messages, value); }
         public MessagesViewModel(DialogModel dialog)
         {
-            GetMessages(dialog);
-            currentDialog = dialog;
-            Api.OnNewMessage += UpdateMessageList;
+            if (dialog != null)
+            {
+                GetMessages(dialog);
+                currentDialog = dialog;
+                Api.OnNewMessage += UpdateMessageList;
+            }
         }
 
         private void UpdateMessageList(Message message, User user)
         {
-            Messages.Add(
+            Messages.Insert(0,
                    new MessagesModel(
                    message.Text,
                    $"{user.FirstName} {user.LastName}",
                    user.Photo50,
-                   message.Date ?? message.Date.Value.ToLocalTime()));
-            //throw new NotImplementedException();
+                   message.Date ?? message.Date.Value.ToLocalTime()
+                   ));
         }
 
         private void GetMessages(DialogModel dialog)
         {
             var messages = Api.VkApi.Messages.GetHistory(new MessagesGetHistoryParams
             {
-                Reversed = true,
+                Count = 200,
+                Reversed = false,
                 Extended = true,
                 UserId = dialog.PeerId,
             }); ;
             var mesList = messages.Messages.ToList();
             var profList = messages.Users.ToList();
-#warning redo with For loop. UPD - redo Done
+
             for (int i = 0; i < mesList.Count; i++)
             {
+                
                 var profile = profList.Where(x => x.Id == mesList[i].FromId).FirstOrDefault();
                 Messages.Add(
                     new MessagesModel(

@@ -32,44 +32,16 @@ namespace VK_R
         private void Authorize_Click(object sender, RoutedEventArgs e)
         {
             //handle captchaneededexception
-            try
-            {
+
 #warning uncomment after debug
                 // Api.Authorize(LoginBox.Text, PasswordBox.Password);
                 Api.Authorize("a.kolpakov2010@mail.ru", "ZxcAsdQwe123");
-            }
-            catch (CaptchaNeededException ex)
-            {
-                var cpt = new System.Windows.Controls.Image 
-                { 
-                    Source = new BitmapImage(ex.Img) 
-                };
-                CaptchaWindow cptchaWindow = new CaptchaWindow(cpt);
-
-                if (cptchaWindow.ShowDialog() == true)
-                {
-                    Api.VkApi.Authorize(new ApiAuthParams
-                    {
-                        Login = LoginBox.Text,
-                        Password = PasswordBox.Password,
-                        CaptchaSid = ex.Sid,
-                        CaptchaKey = cptchaWindow.SolvedCaptcha.Text
-
-                    }) ;
-                }
-                              
-                
-
-            }
+            
+            
             if (Api.VkApi.IsAuthorized)
             {
                 MessageBox.Show(Api.VkApi.IsAuthorized.ToString());
                 Authorized();
-            }
-            else
-            {
-#warning temporary as fuck
-                MessageBox.Show("Fail. Try Again");
             }
         }
         public delegate void Method();

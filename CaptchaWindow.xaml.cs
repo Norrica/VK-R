@@ -22,7 +22,7 @@ namespace VK_R
         public CaptchaWindow(Image cpt)
         {
             InitializeComponent();
-            Captcha.Content = cpt;
+            Captcha = cpt;
         }
     }
 }
