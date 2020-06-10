@@ -20,7 +20,8 @@ namespace VK_R
                 set 
                 {
                     SetField(ref selectedDialog, value);
-                    SelectionChanged?.Invoke(selectedDialog);
+                    if (value!=null)
+                        SelectionChanged?.Invoke(selectedDialog);
                 }
         }
         public event Action<DialogModel> SelectionChanged;
@@ -29,7 +30,7 @@ namespace VK_R
             GetDialogs();
             Api.StartMessagesHandling();
 #warning exception 100%
-            Api.OnNewMessage += RaiseDialog;
+            //Api.OnNewMessage += RaiseDialog;
         }
 
         private void RaiseDialog(Message arg1, User arg2)

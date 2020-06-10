@@ -13,7 +13,6 @@ namespace VK_R
         {
             DisplayedText = membercount.ToString();
         }
-        public Online() { }
         public Online(bool? isOnline, DateTime? lastSeen)
         {
             IsOnline = isOnline;

@@ -15,8 +15,6 @@ namespace VK_R
         private long peerId;
         private string lastMessage;
         private Image profilePicture;
-        private AttachmentContent attachment;
-        private Image imgAttachment;
         private Online online;
         private string quickReply;
         private RelayCommand sendReply;
@@ -25,18 +23,12 @@ namespace VK_R
         public long PeerId { get => peerId; set => peerId = value; }
         public string LastMessage { get => lastMessage; set => SetField(ref lastMessage, value); }
         public Image ProfilePicture { get => profilePicture; set => profilePicture = value; }
-        public AttachmentContent Attachment { get => attachment; set => SetField(ref attachment, value); }
-        public Image ImgAttachment { get => imgAttachment; set => SetField(ref imgAttachment ,value); }
         public Online Online { get => online; set => SetField(ref online, value); }
         public string QuickReply { get => quickReply; set => SetField(ref quickReply, value); }
         public DialogModel()
         {
             API.OnNewMessage += HandleNewMessage;
             API.OnlineChanged += HandleOnlineChanged;
-        }
-        public DialogModel(Image attachment) : this()
-        {
-            ImgAttachment = attachment;
         }
         //for Chats
         public DialogModel(string peerName, long peerId, string lastMessage, Uri avatarUrl) : this()
@@ -85,10 +77,10 @@ namespace VK_R
             return !String.IsNullOrEmpty(QuickReply);
         }
 
-        private void HandleOnlineChanged(User obj)
+        private void HandleOnlineChanged(long obj,bool online)
         {
-            if (obj.Id == PeerId)
-                Online.IsOnline = obj.Online;
+            if (obj == PeerId)
+                Online.IsOnline = online;
         }
 
         private void HandleNewMessage(Message mes,User user)

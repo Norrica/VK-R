@@ -25,7 +25,7 @@ namespace VK_R
         private VkApi vkApi;
         private static volatile ApiBase _instance;
         public event Action<Message, User> OnNewMessage;
-        public event Action<User> OnlineChanged;
+        public event Action<long, bool> OnlineChanged;
         private ulong ts;
         private ulong? pts;
 
@@ -94,56 +94,54 @@ namespace VK_R
             ts = Convert.ToUInt64(longPoolServerResponse.Ts);
             pts = longPoolServerResponse.Pts;
 
-
             new Thread(LongPollEventLoop).Start();
         }
         private void LongPollEventLoop()
         {
+            bool flag = true;
             while (true)
             {
-                LongPollHistoryResponse longPollResponse = VkApi.Messages.GetLongPollHistory(new MessagesGetLongPollHistoryParams()
+                LongPollHistoryResponse lpr = null;
+                flag = !flag;
+                if (flag)
                 {
-                    Ts = ts,
-                    Pts = pts,
-                    Fields = UsersFields.Photo50 //Указывает поля, которые будут возвращаться для каждого профиля. В данном примере для каждого отправителя сообщения получаем фото 100х100
-                });
-
-                pts = longPollResponse.NewPts;
-                for (int i = 0; i < longPollResponse.Messages.Count; i++)
+                    lpr = VkApi.Messages.GetLongPollHistory(new MessagesGetLongPollHistoryParams()
+                    {
+                        Ts = ts,
+                        Pts = pts,
+                        Fields = UsersFields.Photo50
+                    });
+                }
+                else
                 {
-                    var profile = longPollResponse.Profiles
-                             .Where(u => u.Id == longPollResponse.Messages[i].PeerId)
-                             .FirstOrDefault();
-                    System.Windows.Application.Current.Dispatcher.Invoke(OnNewMessage, longPollResponse.Messages[i], profile);
-
-
-                    //                    switch (longPollResponse.History[i][0])
-                    //                    {
-                    //                        case 4://New Message
-                    //
-                    //                            var profile = longPollResponse.Profiles
-                    //                             .Where(u => u.Id == longPollResponse.Messages[i].PeerId)
-                    //                             .FirstOrDefault();
-                    //                            //OnNewMessage?.Invoke(longPollResponse.Messages[j], profile);
-                    //                            System.Windows.Application.Current.Dispatcher.Invoke(OnNewMessage, longPollResponse.Messages[j], profile);
-                    //                            break;
-                    //#warning later:
-                    //                            //case 8://Friend online
-                    //                            //    //longPollResponse.Profiles[i].On
-                    //                            //    OnlineChanged?.Invoke(longPollResponse.Profiles[k]);
-                    //                            //    break;
-                    //                            //case 9://Friend Offline
-                    //                            //    OnlineChanged?.Invoke(longPollResponse.Profiles[k]);
-                    //                            //    break;
-                    //                            //case 61://Friend started typing
-                    //                            //    break;
-                    //                            //case 62://Chat started typing
-                    //                            //    break;
-                    //                    }
+                    lpr = VkApi.Messages.GetLongPollHistory(new MessagesGetLongPollHistoryParams()
+                    {
+                        Ts = ts,
+                        Onlines = true,
+                        Fields = UsersFields.Photo50
+                    });
+                }
+                pts = lpr.NewPts;
+                for (int i = 0; i < lpr.History.Count; i++)
+                {
+                    switch (lpr.History[i][0])
+                    {
+                        //Код 4 - новое сообщение
+                        case 4:
+                            var message = lpr.Messages.Where(x => x.PeerId == lpr.History[i][3]).FirstOrDefault();
+                            var profile = lpr.Profiles.Where(x => x.Id == message.FromId).FirstOrDefault();
+                            System.Windows.Application.Current.Dispatcher.Invoke(OnNewMessage, message, profile);
+                            break;
+                        case 8:
+                            System.Windows.Application.Current.Dispatcher.Invoke(OnlineChanged, lpr.History[i][1] * -1, true);
+                            break;
+                        case 9:
+                            System.Windows.Application.Current.Dispatcher.Invoke(OnlineChanged, lpr.History[i][1] * -1, false);
+                            break;
+                    }
                 }
             }
         }
-
 
     }
 }

@@ -19,8 +19,6 @@
                         </StackPanel>
                         <StackPanel Orientation="Vertical" >
                             <Label Content="{Binding LastMessage}"/>
-                            <!--<Label Content="{Binding Attachment}></Label>-->
-                            <!--<MediaElement Source=""></MediaElement>-->
                             <TextBox x:Name="NotQuickReply" Text="{Binding Path=QuickReply, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MinWidth="100" MinHeight="30">
                                 <TextBox.InputBindings>
                                     <KeyBinding Command="{Binding Path=SendQuickReplyCommand}" Key="Enter" />
